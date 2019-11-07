@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 29 18:03:00 2019
-
-@author: Bartek
-"""
-
 import random
 
 
 class Engine:
     def __init__(self, field):
-        self.field = field
-        self.history = []
-        self.history.append(field.get_shapshot())
-        # For simple vizualization
+        self.field = field #Stores uid_map and units
+        self.history = [] #History of uid_maps after every round
+        self.det_history = [] #Detailed history, holds uids maps after every move
+        
+        self.history.append(field.get_snapshot()) # For simple vizualization
+        self.det_history.append(field.get_snapshot())
 
-    def makeRandomMove(self):
+    def run_random_round(self):
         '''Performs random move with each unit'''
         units = self.field.units
         uids = list(units.keys())
@@ -24,14 +20,15 @@ class Engine:
             # Check if unit is not dead
             if uid not in units.keys():
                 continue
-            available_acts = self.field.getAvailableActions(uid)
+            available_acts = self.field.get_available_actions(uid)
             action, args = random.choice(available_acts)
             # Perform Action (explicit passing of object)
             action(self.field, *args)
+            self.det_history.append(self.field.get_snapshot())
 
-        self.history.append(self.field.get_shapshot())
+        self.history.append(self.field.get_snapshot())
 
-    def checkState(self):
+    def check_state(self):
         '''This function in futre will return info about mode, now only if over'''
         # Obtain set of teams
         teams = [self.field.units[k][0] for k in self.field.units.keys()]
@@ -43,3 +40,6 @@ class Engine:
 
     def get_history(self):
         return self.history
+
+    def get_det_history(self):
+        return self.det_history

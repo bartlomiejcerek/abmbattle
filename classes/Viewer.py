@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
@@ -27,10 +28,10 @@ class Viewer:
         self.obstacles.set_data(oX, oY)
         return (self.red_team, self.blue_team, self.obstacles),
 
-    def show(self):
+    def get_animation(self, interval=900):
         ani = FuncAnimation(self.fig, self.update, frames=len(self.states),
-                            init_func=self.init_plot, interval=900)
-        plt.show()
+                            init_func=self.init_plot, interval=interval)
+        return ani
 
     def convert_to_data(self, field):
         redX, redY = [], []

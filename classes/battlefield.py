@@ -1,28 +1,37 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 29 18:01:50 2019
-
-@author: Bartek
-"""
 import numpy as np
-
 
 class BattleField:
     def __init__(self, fields, units):
         self.uid_map = np.array(fields)
         self.units = units
+        
+        #Find neighbours of each cell that is not obstacle to use later
+        niegh_dict = {}
+        deltas = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        not_obstacles = [(x,y) for (x,y), _ in np.ndenumerate(self.uid_map) if self.uid_map[(x,y)] >= 0]
+        for x, y in not_obstacles:
+            neighbours = [(x + d[0], y + d[1]) for d in deltas]
+            niegh_dict[(x,y)] = []
+            for n in neighbours:
+                x_ok = 0 <= n[0] < self.uid_map.shape[0]
+                y_ok = 0 <= n[1] < self.uid_map.shape[1]
+                if x_ok and y_ok:
+                    if self.uid_map[n] >= 0: #Has to be separet if bcoz of exceptions
+                        niegh_dict[(x,y)].append(n)
+        self.neigh_dict = niegh_dict          
 
-    def unitNothing(self, *args):  # Give option to take args bcoz touple will be passed
+    def unit_nothing(self, *args):  # Give option to take args bcoz touple will be passed
         pass
 
-    def unitMove(self, uid, new_pos):
+    def unit_move(self, uid, new_pos):
         '''That funcion DOES NOT check if move is legal!'''
         curr_pos = np.where(self.uid_map == uid)
         # Old position free, unit on new position
         self.uid_map[curr_pos] = 0
         self.uid_map[new_pos] = uid
 
-    def unitAttack(self, attacker_uid, defender_uid):
+    def unit_attack(self, attacker_uid, defender_uid):
         '''That funcion DOES NOT check if move is legal!'''
         # Get attacker and defender stats
         a_team, a_hp, a_att = self.units[attacker_uid]
@@ -36,42 +45,39 @@ class BattleField:
         else:
             self.units[defender_uid] = (d_team, d_hp - a_att, d_att)
 
-    def getAvailableActions(self, uid):
+    def get_available_actions(self, uid):
         '''Returns list of touples where 0 - action method, 1 - parametrs'''
         # Prepare variables for checking
-        coords = [(-1, 0), (0, 1), (1, 0), (0, -1)]
         curr_pos = np.where(self.uid_map == uid)
-        neighbours = [(curr_pos[0] + c[0], curr_pos[1] + c[1]) for c in coords]
+        
+        #QUICK FIX
+        curr_pos = (curr_pos[0].item(), curr_pos[1].item())
+        
+        neighbours = self.neigh_dict[curr_pos]
         a_team, a_hp, a_att = self.units[uid]
         poss_actions = []
 
-        # Check for move options
+        #Move options
         for n in neighbours:
-            try:  # Check if new move in map range and if free
-                ocupation_ok = self.uid_map[n] == 0
-            except IndexError:  # Will happend if position outside of board
-                ocupation_ok = False
-            if ocupation_ok:
-                poss_actions.append((BattleField.unitMove, (uid, n)))
+            if self.uid_map[n] == 0: #is free
+                poss_actions.append((BattleField.unit_move, (uid, n)))
 
-        # Check for attack options
+        #Attack options
         for n in neighbours:
-            try:
-                d_uid = self.uid_map[n].item()
-            except IndexError:  # Will happend if position outside of board
-                continue
-            if d_uid == 0 or d_uid == -1:
-                continue  # If obstacle or free field can't attack
+            d_uid = self.uid_map[n].item()
+            if d_uid == 0:
+                continue # Empty spot
             d_team, d_hp, d_att = self.units[d_uid]
             if d_team == a_team:
-                continue  # If they are from same team can't attack
-            # Everything seems correct attack
-            poss_actions.append((BattleField.unitAttack, (uid, d_uid)))
+                continue  # friendly fire
+            # Everything seems correct, attack
+            poss_actions.append((BattleField.unit_attack, (uid, d_uid)))
 
         # Always append option to do nothing - with empty touple
-        poss_actions.append((BattleField.unitNothing, ()))
+        poss_actions.append((BattleField.unit_nothing, ()))
 
         return poss_actions
 
-    def get_shapshot(self):
+    def get_snapshot(self):
         return np.copy(self.uid_map)
+    
