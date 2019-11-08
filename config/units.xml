@@ -1,0 +1,26 @@
+<units>	
+	<unit>
+		<uid>1</uid>
+		<team>red</team>
+		<hp>3</hp>
+		<att>1</att>
+	</unit>
+	<unit>
+		<uid>2</uid>
+		<team>red</team>
+		<hp>3</hp>
+		<att>1</att>
+	</unit>
+	<unit>
+		<uid>3</uid>
+		<team>blue</team>
+		<hp>3</hp>
+		<att>1</att>
+	</unit>
+	<unit>
+		<uid>4</uid>
+		<team>blue</team>
+		<hp>3</hp>
+		<att>1</att>
+	</unit>
+</units>

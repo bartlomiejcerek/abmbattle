@@ -15,8 +15,8 @@ class Viewer:
         self.obstacles, = plt.plot([], [], 'ks', markersize=30)
         plt.grid(True)
         axes = plt.gca()
-        axes.set_xlim([0, history[0].shape[0] + 1])
-        axes.set_ylim([0, history[0].shape[1] + 1])
+        axes.set_xlim([0, history[0].shape[0]])
+        axes.set_ylim([0, history[0].shape[1]])
 
     def init_plot(self):
         return self.update(0)

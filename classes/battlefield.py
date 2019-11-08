@@ -19,17 +19,25 @@ class BattleField:
                 if x_ok and y_ok:
                     if self.uid_map[n] >= 0: #Has to be separet if bcoz of exceptions
                         niegh_dict[(x,y)].append(n)
-        self.neigh_dict = niegh_dict          
+        self.neigh_dict = niegh_dict     
+        
+        #Write positions of units to dictionary for fast locating - uid key, pos val 
+        self.units_pos = {}
+        for uid in self.units.keys():
+            pos = np.where(self.uid_map == uid)
+            pos = (pos[0].item(), pos[1].item()) #Unpack from numpy
+            self.units_pos[uid] = pos
 
     def unit_nothing(self, *args):  # Give option to take args bcoz touple will be passed
         pass
 
     def unit_move(self, uid, new_pos):
         '''That funcion DOES NOT check if move is legal!'''
-        curr_pos = np.where(self.uid_map == uid)
+        curr_pos = self.units_pos[uid]
         # Old position free, unit on new position
         self.uid_map[curr_pos] = 0
         self.uid_map[new_pos] = uid
+        self.units_pos[uid] = new_pos #Update units dict too
 
     def unit_attack(self, attacker_uid, defender_uid):
         '''That funcion DOES NOT check if move is legal!'''
@@ -39,20 +47,17 @@ class BattleField:
 
         # Check if we have kill
         if d_hp - a_att <= 0:
-            def_pos = np.where(self.uid_map == defender_uid)
+            def_pos = self.units_pos[defender_uid]
             self.uid_map[def_pos] = 0  # Empty spot where defender was
             self.units.pop(defender_uid)  # Delte from units dict
+            self.units_pos.pop(defender_uid) #Delete from units pos dict
         else:
             self.units[defender_uid] = (d_team, d_hp - a_att, d_att)
 
     def get_available_actions(self, uid):
         '''Returns list of touples where 0 - action method, 1 - parametrs'''
         # Prepare variables for checking
-        curr_pos = np.where(self.uid_map == uid)
-        
-        #QUICK FIX
-        curr_pos = (curr_pos[0].item(), curr_pos[1].item())
-        
+        curr_pos = self.units_pos[uid]        
         neighbours = self.neigh_dict[curr_pos]
         a_team, a_hp, a_att = self.units[uid]
         poss_actions = []
