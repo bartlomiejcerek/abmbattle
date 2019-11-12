@@ -9,4 +9,11 @@ class RandomStrategy():
         
     def make_move(self, field, uid, poss_actions):
         return random.choice(poss_actions)
-        
+
+""" Won't work unless pairs are made        
+class KillTheWeakest():
+    def __init__(self):
+        pass     
+"""
+
+

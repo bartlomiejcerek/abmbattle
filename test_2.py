@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 
 from classes.engine import Engine
-from classes.strategies.randomstrat import RandomStrategy
+from classes.strategies.killclosest import KillTheClosest
 from classes.viewer import Viewer
 
 #2D list where -1..-1 obstacles, 0 free spot, 1..n UID
@@ -10,7 +10,7 @@ map_file = 'config/map.txt'
 #Dictionary of units where KEY: uid, VALS:touple of parameters: (team, HP, ATTACK)
 units_file = 'config/units.xml'
 
-strategy = RandomStrategy()
+strategy = KillTheClosest()
 engine = Engine(strategy)
 engine.load_config(map_file, units_file)
 units_initial = engine.get_units()
