@@ -13,21 +13,21 @@ units_file = 'config/units.xml'
 strategy = KillTheClosest()
 engine = Engine(strategy)
 engine.load_config(map_file, units_file)
-units_initial = engine.get_units()
+units_initial = engine.get_units_history()
 
 end = False
 i = 0
 while not end:
     engine.run_round()
-    #print(engine.field.uid_map)
     end = engine.check_state()
     i += 1
 
-print('Over after {} moves'.format(i))
+print('Over after {} rounds'.format(i))
+print('Winner is team: ', engine.get_winner())
+
 
 #Animation needs to be returned to context where it will be show to work with all backends
 history = engine.get_history()
-
-animation = Viewer(units_initial, history).get_animation(interval = 300)
+animation = Viewer(units_initial, history).get_animation(interval = 200)
 plt.show()
 

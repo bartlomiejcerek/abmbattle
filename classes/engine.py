@@ -56,9 +56,13 @@ class Engine:
         teams = [self.field.units[k][0] for k in self.field.units.keys()]
         teams = set(teams)
         if len(teams) == 1:
+            self.winner = teams.pop() #Only remaining team is winner
             return True
         else:
             return False
+        
+    def get_winner(self):
+        return self.winner
 
     def get_history(self):
         return self.history
