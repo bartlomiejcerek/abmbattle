@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 
 from classes.engine import Engine
-from classes.strategies.killclosestsimple import KillTheClosest
+from classes.strategies.killclosestoptimal import KillTheClosest
 from classes.viewer import Viewer
 
 #2D list where -1..-1 obstacles, 0 free spot, 1..n UID

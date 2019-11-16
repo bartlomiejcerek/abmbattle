@@ -9,6 +9,7 @@ class Engine:
         self.strategy = strategy
         self.history = []  # History of uid_maps after every move
         self.units_history = []  # History of uid_maps after every move
+        self.round = 0
 
     def load_config(self, map_file, units_file):
         # Read map file
@@ -33,6 +34,7 @@ class Engine:
         self.units_history.append(units)
 
     def run_round(self):
+        self.round += 1
         '''Performs move with each unit'''
         units = self.field.units
         uids = list(units.keys())  # Bcoz iteraotr will change size
