@@ -4,20 +4,12 @@ import matplotlib.pyplot as plt
 from classes.engine import Engine
 from classes.viewer import Viewer
 
-from classes.strategies.randomstrat import RandomStrategy
-from classes.strategies.killclosestoptimal import KillTheClosest
-from classes.strategies.killclosestsimple import KillTheClosest as KillTheClosesSimple
-
-
 #2D list where -1..-1 obstacles, 0 free spot, 1..n UID
 map_file = 'config/map.txt'
-#Dictionary of units where KEY: uid, VALS:touple of parameters: (team, HP, ATTACK)
+#Dictionary of units where KEY: uid, VALS:touple of parameters: (TEAM, HP, ATTACK, STARTEGY)
 units_file = 'config/units.xml'
 
-#CHOICE: RandomStrategy, KillTheClosest, KillTheClosesSimple
-strategy = KillTheClosest()
-
-engine = Engine(strategy)
+engine = Engine()
 engine.load_config(map_file, units_file)
 units_initial = engine.get_units_history()
 
@@ -36,4 +28,3 @@ print('Winner is team: ', engine.get_winner())
 history = engine.get_history()
 animation = Viewer(units_initial, history).get_animation(interval = 200)
 plt.show()
-

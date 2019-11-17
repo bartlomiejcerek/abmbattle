@@ -56,8 +56,8 @@ class Viewer:
                     obstacleX.append(i + 0.5)
                     obstacleY.append(j + 0.5)
                 if field[i, j] > 0:
-                    color = units[field[i, j]][0]
-                    hp = units[field[i, j]][1]
+                    color = units[field[i, j]].team
+                    hp = units[field[i, j]].hp
                     if color == 'red':
                         redX.append(i + 0.5)
                         redY.append(j + 0.5)

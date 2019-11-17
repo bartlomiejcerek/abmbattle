@@ -1,5 +1,4 @@
 #Essential in all strategies for optimal movement
-import random
 import numpy as np
 import classes.strategies.Utils.enemies as en
 
