@@ -2,15 +2,21 @@
 import matplotlib.pyplot as plt
 
 from classes.engine import Engine
-from classes.strategies.killclosestoptimal import KillTheClosest
 from classes.viewer import Viewer
+
+from classes.strategies.randomstrat import RandomStrategy
+from classes.strategies.killclosestoptimal import KillTheClosest
+from classes.strategies.killclosestsimple import KillTheClosest as KillTheClosesSimple
+
 
 #2D list where -1..-1 obstacles, 0 free spot, 1..n UID
 map_file = 'config/map.txt'
 #Dictionary of units where KEY: uid, VALS:touple of parameters: (team, HP, ATTACK)
 units_file = 'config/units.xml'
 
+#CHOICE: RandomStrategy, KillTheClosest, KillTheClosesSimple
 strategy = KillTheClosest()
+
 engine = Engine(strategy)
 engine.load_config(map_file, units_file)
 units_initial = engine.get_units_history()

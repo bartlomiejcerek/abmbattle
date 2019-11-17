@@ -3,7 +3,6 @@ import xml.etree.ElementTree as ET
 
 from classes.battlefield import BattleField
 
-
 class Engine:
     def __init__(self, strategy):
         self.strategy = strategy
@@ -37,12 +36,9 @@ class Engine:
         self.round += 1
         '''Performs move with each unit'''
         units = self.field.units
-        uids = list(units.keys())  # Bcoz iteraotr will change size
+        alive_uids = [uid for uid in units.keys() if units[uid][1] > 0]
 
-        for uid in uids:
-            # QUICK FIX Check if unit is not dead - don't delte from iterator !!!
-            if uid not in units.keys():
-                continue
+        for uid in alive_uids:
             available_acts = self.field.get_available_actions(uid)
             action, args = self.strategy.make_move(self.field, uid, available_acts)
             # Perform Action (explicit passing of object)
@@ -60,8 +56,7 @@ class Engine:
         if len(teams) == 1:
             self.winner = teams.pop() #Only remaining team is winner
             return True
-        else:
-            return False
+        return False
         
     def get_winner(self):
         return self.winner

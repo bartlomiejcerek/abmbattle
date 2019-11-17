@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import random
 import numpy as np
 import classes.strategies.Utils.enemies as en
 import classes.strategies.Utils.search as search

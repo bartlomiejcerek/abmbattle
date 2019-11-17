@@ -6,7 +6,9 @@ import numpy as np
 
 class BattleField:
     def __init__(self, fields, units):
+        #2D array where -1..-1 obstacles, 0 free spot, 1..n UID
         self.uid_map = np.array(fields)
+        #Dictionary of units where KEY: uid, VALS: touple of parameters: (team, HP, ATTACK)
         self.units = units
 
         # Find neighbours of each cell that is not obstacle to use later
