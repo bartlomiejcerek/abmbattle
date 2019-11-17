@@ -33,7 +33,7 @@ def makePath(agent, enemies, field, visitedField):
         path = []
         stepValue = visitedField[enemy]
         path.append(enemy)
-        currentPoint = enemy
+        currentPoint = nextStep = enemy
         nextStepValue = np.inf
 
         while(not stepValue == 1):
