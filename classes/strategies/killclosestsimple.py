@@ -24,7 +24,7 @@ class KillTheClosest():
             return poss_actions[0]
 
         for i in range(0, len(poss_actions)):
-            if (poss_actions[i][0] == BattleField.unit_attack):
+            if (poss_actions[i][0].type == 'Attack'):
                 return poss_actions[i]
 
         mahBoy, enemies = en.findEnemies(field, uid)
@@ -33,7 +33,7 @@ class KillTheClosest():
 
         poss_best_moves = []
         for action in poss_actions:
-            if action[0] == BattleField.unit_nothing:
+            if action[0].type == 'Nothing':
                 continue
             if en.manhattanMetcic(action[1][1], closestEnemy) < dist:
                 poss_best_moves.append(action)
