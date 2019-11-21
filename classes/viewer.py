@@ -33,17 +33,17 @@ class Viewer:
         self.obstacles.set_data(oX, oY)
 
         for i, hp in enumerate(rL):
-            hp_label = self.ax.annotate(hp, xy=(rX[i], rY[i]), ha='center', va='center')
+            hp_label = self.ax.annotate(hp, xy=(rX[i], rY[i]), ha='center', va='center', color='white')
             self.annotations.append(hp_label)
         for i, hp in enumerate(bL):
-            hp_label = self.ax.annotate(hp, xy=(bX[i], bY[i]), ha='center', va='center')
+            hp_label = self.ax.annotate(hp, xy=(bX[i], bY[i]), ha='center', va='center',  color='white')
             self.annotations.append(hp_label)
         return (self.red_team, self.blue_team, self.obstacles),
 
     def get_animation(self, interval=900):
         ani = FuncAnimation(self.fig, self.update, frames=len(self.states),
                             init_func=self.init_plot, interval=interval)
-        # ani.save('poc.gif', dpi=120, writer='imagemagick')
+        #ani.save('rules.gif', dpi=120, writer='imagemagick')
         return ani
 
     def convert_to_data(self, field, units):

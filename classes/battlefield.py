@@ -68,6 +68,7 @@ class BattleField:
             
     unit_attack.type = 'Attack' #Add type for easy checking
 
+
     def get_available_actions(self, uid):
         '''Returns list of touples where 0 - action method, 1 - parametrs'''
         # Prepare variables for checking
