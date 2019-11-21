@@ -13,12 +13,13 @@ def BFS(agent, enemies, field, considerAgents=True):
 
         currentPoint = bfsQueue.pop(0)
 
-        if considerAgents:
-            isCellEmpty = field.uid_map[point] == 0
-        else:
-            isCellEmpty = field.uid_map[point] >= 0
-
         for point in field.neigh_dict.get(currentPoint):
+
+            if considerAgents:
+                isCellEmpty = field.uid_map[point] == 0
+            else:
+                isCellEmpty = field.uid_map[point] >= 0
+
             if (isCellEmpty and visitedField[point] > visitedField[currentPoint] + 1):
                 bfsQueue.append(point)
                 visitedField[point] = visitedField[currentPoint] + 1
