@@ -195,8 +195,22 @@ class SetCoordinates(Page):
         if self.clear.get():
             settings.clear_position(int(event.xdata), int(event.ydata))
         if self.unit.get():
-            settings.create_unit(int(event.xdata), int(event.ydata), self.team.get(), self.hp.get(),
-                                 self.attack.get(), self.strategy.get())
+            try:
+                if self.team.get() is None or self.team.get() == "":
+                    raise ValueError("Pick team")
+                hp = int(self.hp.get())
+                attack = int(self.attack.get())
+                if hp <= 0 or attack <= 0:
+                    raise ValueError("Hp and attack should be positive")
+
+                if self.strategy.get() is None or self.strategy.get() == "":
+                    raise ValueError("Choose strategy")
+                settings.create_unit(int(event.xdata), int(event.ydata), self.team.get(), hp,
+                                     attack, self.strategy.get())
+            except Exception as e:
+                logging.error(e)
+                self.error("Error during placing unit: " + str(e) + "\n See logs for detailed information")
+
         self.refresh_board()
 
     def on_move(self, event):
