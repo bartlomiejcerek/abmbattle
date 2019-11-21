@@ -33,9 +33,12 @@ class KillTheClosest():
 
         vf = search.BFS(mahBoy, enemies, field)
         path = search.makePath(mahBoy, enemies, field, vf)
+        
         # TODO: fix this hack please
+        # Will try to get rid of this in Utils.search.makePath, however this might need to stay
+        
         if len(path) == 0:
-            return poss_actions[0]
+            return poss_actions[-1]
         nextStep = path.pop()
 
         for action in poss_actions:
