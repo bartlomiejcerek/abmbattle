@@ -2,6 +2,7 @@
 import classes.strategies.Utils.enemies as en
 import classes.strategies.Utils.search as search
 
+
 class KillTheClosest():
     def __init__(self):
         pass
@@ -27,16 +28,19 @@ class KillTheClosest():
         # start
         mahBoy, enemies = en.findEnemies(field, uid)
 
-        if(len(enemies)==0): #important if no enemies left, but a move still has to be done to finish round
+        if (len(enemies) == 0):  # important if no enemies left, but a move still has to be done to finish round
             return poss_actions[-1]
 
         vf = search.BFS(mahBoy, enemies, field)
         path = search.makePath(mahBoy, enemies, field, vf)
+        # TODO: fix this hack please
+        if len(path) == 0:
+            return poss_actions[0]
         nextStep = path.pop()
 
         for action in poss_actions:
-            if(action[0].type == 'Move'):
-                if(action[1][1] == nextStep):
+            if (action[0].type == 'Move'):
+                if (action[1][1] == nextStep):
                     return action
 
-        #finish
+        # finish

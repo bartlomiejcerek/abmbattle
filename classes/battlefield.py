@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 import copy
+
 import numpy as np
 
-from classes.unit import Unit
 
 class BattleField:
-    def __init__(self, fields, units_dict):
-        #2D array where -1..-1 obstacles, 0 free spot, 1..n UID
-        self.uid_map = np.array(fields)
-        
-        #Dictionary of units where KEY: uid, VALS: touple of parameters: (team, HP, ATTACK)
-        self.units = {}
-        for uid in units_dict.keys():
-            self.units[uid] = Unit(units_dict[uid])
+    def __init__(self, fields, units):
+        # 2D array where -1..-1 obstacles, 0 free spot, 1..n UID
+        self.uid_map = fields
+        self.units = units
 
         # Find neighbours of each cell that is not obstacle to use later
         niegh_dict = {}
@@ -38,8 +34,8 @@ class BattleField:
 
     def unit_nothing(self, *args):  # Give option to take args bcoz touple will be passed
         pass
-    
-    unit_nothing.type = 'Nothing' #Add type for easy checking 
+
+    unit_nothing.type = 'Nothing'  # Add type for easy checking
 
     def unit_move(self, uid, new_pos):
         '''That funcion DOES NOT check if move is legal!'''
@@ -48,8 +44,8 @@ class BattleField:
         self.uid_map[curr_pos] = 0
         self.uid_map[new_pos] = uid
         self.units_pos[uid] = new_pos  # Update units dict too
-        
-    unit_move.type = 'Move' #Add type for easy checking
+
+    unit_move.type = 'Move'  # Add type for easy checking
 
     def unit_attack(self, attacker_uid, defender_uid):
         '''That funcion DOES NOT check if move is legal!'''
@@ -65,9 +61,8 @@ class BattleField:
             self.units_pos.pop(defender_uid)  # Delete from units pos dict
         else:
             self.units[defender_uid].hp = defender.hp - attacker.att
-            
-    unit_attack.type = 'Attack' #Add type for easy checking
 
+    unit_attack.type = 'Attack'  # Add type for easy checking
 
     def get_available_actions(self, uid):
         '''Returns list of touples where 0 - action method, 1 - parametrs'''
@@ -84,7 +79,7 @@ class BattleField:
 
         # Attack options
         for n in neighbours:
-            n_uid = self.uid_map[n].item() #Get neighbour unit
+            n_uid = self.uid_map[n].item()  # Get neighbour unit
             if n_uid == 0:
                 continue  # Empty spot
             n_unit = self.units[n_uid]
