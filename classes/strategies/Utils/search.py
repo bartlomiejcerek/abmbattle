@@ -2,9 +2,8 @@
 import numpy as np
 
 
-def BFS(agent, enemies, field):
+def BFS(agent, enemies, field, considerAgents=True):
     bfsQueue = []
-    movesCounter = 0
 
     visitedField = np.full((len(field.uid_map), len(field.uid_map[0])), np.inf)
     visitedField[agent] = 0
@@ -14,8 +13,13 @@ def BFS(agent, enemies, field):
 
         currentPoint = bfsQueue.pop(0)
 
+        if considerAgents:
+            isCellEmpty = field.uid_map[point] == 0
+        else:
+            isCellEmpty = field.uid_map[point] >= 0
+
         for point in field.neigh_dict.get(currentPoint):
-            if (field.uid_map[point] == 0 and visitedField[point] > visitedField[currentPoint] + 1):
+            if (isCellEmpty and visitedField[point] > visitedField[currentPoint] + 1):
                 bfsQueue.append(point)
                 visitedField[point] = visitedField[currentPoint] + 1
 

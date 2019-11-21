@@ -25,7 +25,6 @@ class KillTheClosest():
             if (poss_actions[i][0].type == 'Attack'):
                 return poss_actions[i]
 
-        # start
         mahBoy, enemies = en.findEnemies(field, uid)
 
         if (len(enemies) == 0):  # important if no enemies left, but a move still has to be done to finish round
@@ -33,12 +32,15 @@ class KillTheClosest():
 
         vf = search.BFS(mahBoy, enemies, field)
         path = search.makePath(mahBoy, enemies, field, vf)
-        
-        # TODO: fix this hack please
+
         # Will try to get rid of this in Utils.search.makePath, however this might need to stay
         
         if len(path) == 0:
-            return poss_actions[-1]
+            # return poss_actions[-1]
+            vf = search.BFS(mahBoy, enemies, field, False)
+            path = search.makePath(mahBoy, enemies, field, vf)
+
+        # Dangerous pop
         nextStep = path.pop()
 
         for action in poss_actions:
@@ -46,4 +48,4 @@ class KillTheClosest():
                 if (action[1][1] == nextStep):
                     return action
 
-        # finish
+        return poss_actions[-1]
