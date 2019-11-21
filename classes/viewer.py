@@ -52,7 +52,7 @@ class Viewer:
     def get_animation(self, interval=900):
         ani = FuncAnimation(self.fig, self.update, frames=len(self.states),
                             init_func=self.init_plot, interval=interval)
-        ani.save('little_masakra.gif', dpi=120, writer='imagemagick')
+        #ani.save('little_masakra.gif', dpi=120, writer='imagemagick')
         return ani
 
     def convert_to_data(self, field, units):
