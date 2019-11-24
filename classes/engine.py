@@ -2,6 +2,7 @@
 import json
 
 import numpy as np
+import random
 
 from classes.battlefield import BattleField
 from classes.unit import Unit
@@ -40,6 +41,7 @@ class Engine:
         # Unit can be killed and deleted from units dict during the round.
         # Then iterator will change and cause error so hard copy it
         all_uids = list(units.keys())
+        random.shuffle(all_uids)
         for uid in all_uids:
             # First check if unit was not killed IN THIS ROUND if yes ignore
             if uid not in units.keys():
