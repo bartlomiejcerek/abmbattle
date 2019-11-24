@@ -25,7 +25,12 @@ class Engine:
         units = {}
         for uuid in units_dict.keys():
             params = units_dict[uuid]
-            units[int(uuid)] = Unit(params['team'], int(params['hp']), int(params['att']), params['strat'])
+            units[int(uuid)] = Unit(params['team'], 
+                                    int(params['hp']), 
+                                    int(params['att']), 
+                                    int(params['ran']), 
+                                    params['strat']
+                                    )
 
         self.field = BattleField(init_pos, units)
         # For vizualization
@@ -41,7 +46,7 @@ class Engine:
         # Unit can be killed and deleted from units dict during the round.
         # Then iterator will change and cause error so hard copy it
         all_uids = list(units.keys())
-        random.shuffle(all_uids)
+        random.shuffle(all_uids) #Random initiative in each round
         for uid in all_uids:
             # First check if unit was not killed IN THIS ROUND if yes ignore
             if uid not in units.keys():

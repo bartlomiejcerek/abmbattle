@@ -4,8 +4,7 @@ from tkinter import messagebox
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
 import numpy as np
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from settings import Settings
 

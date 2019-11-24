@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from classes.engine import Engine
 from classes.viewer import Viewer
 
-settings_file = 'config/teams.json'
+settings_file = 'config/range.json'
 
 engine = Engine()
 engine.load_config(settings_file)
