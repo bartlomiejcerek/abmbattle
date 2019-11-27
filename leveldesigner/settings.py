@@ -67,19 +67,20 @@ class Settings():
             if prev > 0:
                 del self.units[prev]
 
-    def create_unit(self, x, y, team, hp, attack, strategy):
+    def create_unit(self, x, y, team, hp, attack, ran, strategy):
         if self.helth_check(x, y):
             prev = self.field[x][y]
             if prev > 0:
                 self.units[prev]['team'] = team
                 self.units[prev]['hp'] = hp
                 self.units[prev]['att'] = attack
+                self.units[prev]['ran'] = ran
                 self.units[prev]['strat'] = strategy
             else:
                 self.id_counter += 1
                 self.field[x][y] = self.id_counter
                 self.units[self.id_counter] = {'uid': self.id_counter, 'team': team,
-                                               'hp': hp, 'att': attack,
+                                               'hp': hp, 'att': attack, 'ran': ran,
                                                'strat': strategy}
 
     def helth_check(self, x, y):

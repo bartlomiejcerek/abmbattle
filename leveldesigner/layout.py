@@ -100,7 +100,7 @@ class TeamsDialog(Page):
         self.team_var = tk.StringVar(self)
         teams_label = tk.Label(self, text="Teams:").grid(row=0)
         self.teams = tk.Listbox(self, selectmode='extended', height=20, width=30)
-        self.teams.grid(row=1, padx=(100, 10), pady=(10, 30))
+        self.teams.grid(row=1, padx=(70, 10), pady=(10, 30))
         delete_element = tk.Button(self, text="Delete", command=self.delete).grid(row=1, column=1)
         self.one_team = tk.Entry(self, textvariable=self.team_var).grid(row=2, column=0)
         add_element = tk.Button(self, text="Add", command=self.add).grid(row=2, column=1)
@@ -157,6 +157,7 @@ class SetCoordinates(Page):
         self.team = tk.StringVar(self)
         self.hp = tk.StringVar(self)
         self.attack = tk.StringVar(self)
+        self.ran = tk.StringVar(self)
         self.strategy = tk.StringVar(self)
         self.strategy_list = ["KillTheClosest", "RandomStrategy"]
         self.team_list = ()
@@ -177,9 +178,13 @@ class SetCoordinates(Page):
         tk.Label(parameters, text="Attack").grid(row=7, sticky=tk.W)
         self.atack_el = tk.Entry(parameters, textvariable=self.attack)
         self.atack_el.grid(row=8)
-        tk.Label(parameters, text="Strategy").grid(row=9, sticky=tk.W)
-        self.strategy_element = tk.OptionMenu(parameters, self.strategy, *self.strategy_list)
+        tk.Label(parameters, text="Range").grid(row=9, sticky=tk.W)
+        self.strategy_element = tk.OptionMenu(parameters, self.ran, *(1,2))
         self.strategy_element.grid(row=10, sticky=tk.W)
+        self.strategy_element.config(width=30)
+        tk.Label(parameters, text="Strategy").grid(row=11, sticky=tk.W)
+        self.strategy_element = tk.OptionMenu(parameters, self.strategy, *self.strategy_list)
+        self.strategy_element.grid(row=12, sticky=tk.W)
         self.strategy_element.config(width=30)
 
         self.teams_map = {}
@@ -197,15 +202,20 @@ class SetCoordinates(Page):
             try:
                 if self.team.get() is None or self.team.get() == "":
                     raise ValueError("Pick team")
+                #TODO Rises error when int('')
                 hp = int(self.hp.get())
                 attack = int(self.attack.get())
                 if hp <= 0 or attack <= 0:
                     raise ValueError("Hp and attack should be positive")
+                
+                if self.ran.get() is None or self.ran.get() == "":
+                    raise ValueError("Choose range")
 
                 if self.strategy.get() is None or self.strategy.get() == "":
                     raise ValueError("Choose strategy")
+                
                 settings.create_unit(int(event.xdata), int(event.ydata), self.team.get(), hp,
-                                     attack, self.strategy.get())
+                                     attack, int(self.ran.get()), self.strategy.get())
             except Exception as e:
                 logging.error(e)
                 self.error("Error during placing unit: " + str(e) + "\n See logs for detailed information")
@@ -289,12 +299,12 @@ class SaveToFile(Page):
 
     def chose_file(self):
         self.filename_var.set(asksaveasfilename(initialdir="/", title="Select file",
-                                                filetypes=(("battle giles", "*.json"), ("all files", "*.*"))))
+                                                filetypes=(("battle files", "*.json"), ("all files", "*.*"))))
         try:
             file_name = self.filename_var.get()
             if file_name and file_name != "":
                 settings.save_to_file(file_name)
-            self.info("Settings loaded")
+            self.info("Settings saved")
 
         except Exception as e:
             logging.error(e)
