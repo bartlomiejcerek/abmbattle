@@ -202,9 +202,13 @@ class SetCoordinates(Page):
             try:
                 if self.team.get() is None or self.team.get() == "":
                     raise ValueError("Pick team")
-                #TODO Rises error when int('')
-                hp = int(self.hp.get())
-                attack = int(self.attack.get())
+                    
+                try: #Nested try to make sure casting happend
+                    hp = int(self.hp.get())
+                    attack = int(self.attack.get())
+                except:
+                    raise ValueError("Set HP and Attack")
+             
                 if hp <= 0 or attack <= 0:
                     raise ValueError("Hp and attack should be positive")
                 
