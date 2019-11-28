@@ -1,8 +1,9 @@
 # Essential in all strategies for optimal movement
 import numpy as np
+import classes.strategies.Utils.enemies as en
 
 
-def BFS(agent, enemies, field, considerAgents=True):
+def BFS(agent, field, considerAgents=True):
     bfsQueue = []
 
     visitedField = np.full((len(field.uid_map), len(field.uid_map[0])), np.inf)
@@ -71,3 +72,12 @@ def getShortestPath(paths, visitedField):
             minPath = path
 
     return minPath
+
+def findClosestEnemy(self, agent, enemies):
+
+    distances = []
+
+    for i in enemies:
+        distances.append(en.manhattanMetcic(agent, i))
+
+    return enemies[distances.index(min(distances))]
