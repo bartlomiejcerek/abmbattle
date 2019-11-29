@@ -30,14 +30,14 @@ class KillTheClosest():
         if (len(enemies) == 0):  # important if no enemies left, but a move still has to be done to finish round
             return poss_actions[-1]
 
-        vf = search.BFS(mahBoy, enemies, field)
+        vf = search.BFS(mahBoy, field)
         path = search.makePath(mahBoy, enemies, field, vf)
 
         # Will try to get rid of this in Utils.search.makePath, however this might need to stay
         
         if len(path) == 0:
             # return poss_actions[-1]
-            vf = search.BFS(mahBoy, enemies, field, False)
+            vf = search.BFS(mahBoy, field, False)
             path = search.makePath(mahBoy, enemies, field, vf)
 
         # Dangerous pop
