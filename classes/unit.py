@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from classes.strategies.killclosestoptimal import KillTheClosest
 from classes.strategies.randomstrat import RandomStrategy
+from classes.strategies.pacifist import Pacifist
 
 # Define Which Strategies May Be used
-available_strategies = [KillTheClosest, RandomStrategy]
+available_strategies = [KillTheClosest, RandomStrategy, Pacifist]
 
 startegies_by_name = {}
 for strat in available_strategies:

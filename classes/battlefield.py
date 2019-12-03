@@ -4,26 +4,37 @@ import copy
 import numpy as np
 
 
+#Module Utilities
+#Create neighbour dict given deltas and not obstacles - for different range options
+def _create_neigh_dict(deltas, not_obstacles, uid_map):
+    neigh_dict = {}
+    for x, y in not_obstacles:
+        neighbours = [(x + d[0], y + d[1]) for d in deltas]
+        neigh_dict[(x, y)] = []
+        for n in neighbours:
+            x_ok = 0 <= n[0] < uid_map.shape[0]
+            y_ok = 0 <= n[1] < uid_map.shape[1]
+            if x_ok and y_ok:
+                if uid_map[n] >= 0:  # Has to be separet if bcoz of exceptions
+                    neigh_dict[(x, y)].append(n)                
+    return neigh_dict
+    
+
+#Battle Field Class
 class BattleField:
     def __init__(self, fields, units):
         # 2D array where -1..-1 obstacles, 0 free spot, 1..n UID
         self.uid_map = fields
         self.units = units
 
-        # Find neighbours of each cell that is not obstacle to use later
-        niegh_dict = {}
-        deltas = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        # Find neighbours for range 1 and 2 apart of each cell that is not obstacle to use later
+        deltas1 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        deltas2 = [(-2, 0), (0, 2), (2, 0), (0, -2)]
         not_obstacles = [(x, y) for (x, y), _ in np.ndenumerate(self.uid_map) if self.uid_map[(x, y)] >= 0]
-        for x, y in not_obstacles:
-            neighbours = [(x + d[0], y + d[1]) for d in deltas]
-            niegh_dict[(x, y)] = []
-            for n in neighbours:
-                x_ok = 0 <= n[0] < self.uid_map.shape[0]
-                y_ok = 0 <= n[1] < self.uid_map.shape[1]
-                if x_ok and y_ok:
-                    if self.uid_map[n] >= 0:  # Has to be separet if bcoz of exceptions
-                        niegh_dict[(x, y)].append(n)
-        self.neigh_dict = niegh_dict
+        #Range 1 
+        self.neigh_dict1 = _create_neigh_dict(deltas1, not_obstacles, self.uid_map)
+        #Range 2
+        self.neigh_dict2 = _create_neigh_dict(deltas2, not_obstacles, self.uid_map)
 
         # Write positions of units to dictionary for fast locating - uid key, pos val
         self.units_pos = {}
@@ -68,17 +79,23 @@ class BattleField:
         '''Returns list of touples where 0 - action method, 1 - parametrs'''
         # Prepare variables for checking
         curr_pos = self.units_pos[uid]
-        neighbours = self.neigh_dict[curr_pos]
+        neighbours1 = self.neigh_dict1[curr_pos] #Range 1
+        neighbours2 = self.neigh_dict2[curr_pos] #Range 2
         unit = self.units[uid]
         poss_actions = []
 
         # Move options
-        for n in neighbours:
+        for n in neighbours1:
             if self.uid_map[n] == 0:  # is free
                 poss_actions.append((BattleField.unit_move, (uid, n)))
 
-        # Attack options
-        for n in neighbours:
+        # Attack options, first check range of attack 
+        if unit.ran > 1:
+            neigh_to_attac = neighbours1 + neighbours2
+        else:
+            neigh_to_attac = neighbours1
+        
+        for n in neigh_to_attac:
             n_uid = self.uid_map[n].item()  # Get neighbour unit
             if n_uid == 0:
                 continue  # Empty spot
@@ -86,7 +103,7 @@ class BattleField:
             if unit.team == n_unit.team:
                 continue  # friendly fire
             # Everything seems correct, attack
-            poss_actions.append((BattleField.unit_attack, (uid, n_uid)))
+            poss_actions.append((BattleField.unit_attack, (uid, n_uid)))       
 
         # Always append option to do nothing - with empty touple
         poss_actions.append((BattleField.unit_nothing, ()))

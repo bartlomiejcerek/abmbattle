@@ -38,7 +38,7 @@ class Engine:
         self.history.append(field)
         self.units_history.append(units)
 
-    def run_round(self):
+    def run_round(self, miss_prob):
         '''Performs move with each unit'''
         self.round += 1
         units = self.field.units
@@ -52,7 +52,13 @@ class Engine:
             if uid not in units.keys():
                 continue
             available_acts = self.field.get_available_actions(uid)
+            print(available_acts, '\n')
             action, args = units[uid].strat.make_move(self.field, uid, available_acts)
+            
+            #Add missing probability 
+            if action.type == "Attack" and random.random() > miss_prob:
+                action = BattleField.unit_nothing
+            
             # Perform Action (explicit passing of object)
             action(self.field, *args)
 

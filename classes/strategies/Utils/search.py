@@ -14,7 +14,7 @@ def BFS(agent, field, considerAgents=True):
 
         currentPoint = bfsQueue.pop(0)
 
-        for point in field.neigh_dict.get(currentPoint):
+        for point in field.neigh_dict1.get(currentPoint):
 
             if considerAgents:
                 isCellEmpty = field.uid_map[point] == 0
@@ -40,7 +40,7 @@ def makePath(agent, enemies, field, visitedField):
         nextStepValue = np.inf
 
         while (not stepValue == 1):
-            for point in field.neigh_dict.get(currentPoint):
+            for point in field.neigh_dict1.get(currentPoint):
                 if (visitedField[point] < visitedField[currentPoint] and visitedField[point] < nextStepValue):
                     nextStepValue = visitedField[point]
                     nextStep = point

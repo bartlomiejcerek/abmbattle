@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from classes.engine import Engine
 from classes.viewer import Viewer
 
-settings_file = 'config/with_range.json'
+settings_file = 'config/2on2_killclosest.json'
 
 engine = Engine()
 engine.load_config(settings_file)
@@ -12,7 +12,7 @@ engine.load_config(settings_file)
 end = False
 i = 0
 while not end:
-    engine.run_round()
+    engine.run_round(0.2) #Run round with 0.2 miss prob.
     end = engine.check_state()
     i += 1
 
