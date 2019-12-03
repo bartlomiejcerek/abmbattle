@@ -39,12 +39,16 @@ class Viewer:
 
         self.annotations[:] = []
         obstacles, units = self.convert_to_data(self.states[num], self.units_history[num])
-        for team in units.keys():
-            self.data[team][0].set_data(units[team]['x'], units[team]['y'])
-            for i, hp in enumerate(units[team]['hp']):
-                hp_label = self.ax.annotate(hp, xy=(units[team]['x'][i], units[team]['y'][i]), ha='center', va='center',
-                                            color='white', size=10)
-                self.annotations.append(hp_label)
+        for team in self.data.keys():
+            if team in units.keys():
+                self.data[team][0].set_data(units[team]['x'], units[team]['y'])
+                for i, hp in enumerate(units[team]['hp']):
+                    hp_label = self.ax.annotate(hp, xy=(units[team]['x'][i], units[team]['y'][i]), ha='center',
+                                                va='center',
+                                                color='white', size=10)
+                    self.annotations.append(hp_label)
+            else:
+                self.data[team][0].set_data([], [])
         self.obstacles.set_data(obstacles['x'], obstacles['y'])
         lines = (self.obstacles, [units[d] for d in units.keys()])
         return lines,
@@ -52,7 +56,7 @@ class Viewer:
     def get_animation(self, interval=900):
         ani = FuncAnimation(self.fig, self.update, frames=len(self.states),
                             init_func=self.init_plot, interval=interval)
-        #ani.save('little_masakra.gif', dpi=120, writer='imagemagick')
+        # ani.save('little_masakra.gif', dpi=120, writer='imagemagick')
         return ani
 
     def convert_to_data(self, field, units):
