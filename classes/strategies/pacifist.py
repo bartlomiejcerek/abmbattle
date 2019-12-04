@@ -16,7 +16,7 @@ class Pacifist():
         poss_best_moves = []
 
         for action in poss_actions:
-            if action[0].type == 'Nothing':
+            if action[0].type == 'Nothing' or action[0].type == 'Attack':
                 continue
             if en.manhattanMetcic(action[1][1], closestEnemy) > dist:
                 poss_best_moves.append(action)

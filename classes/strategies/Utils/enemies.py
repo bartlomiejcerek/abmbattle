@@ -2,7 +2,7 @@ import numpy as np
 
 def manhattanMetcic(source, dest):
 
-    return abs(source[0] - dest[0]), abs(source[1] - dest[1])
+    return abs(source[0] - dest[0]) + abs(source[1] - dest[1])
 
 def findEnemies(field, uid):
 

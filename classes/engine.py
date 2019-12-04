@@ -28,7 +28,7 @@ class Engine:
             units[int(uuid)] = Unit(params['team'], 
                                     int(params['hp']), 
                                     int(params['att']), 
-                                    int(params['ran']), 
+                                    int(params['ran']),
                                     params['strat']
                                     )
 

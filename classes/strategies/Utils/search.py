@@ -73,7 +73,7 @@ def getShortestPath(paths, visitedField):
 
     return minPath
 
-def findClosestEnemy(self, agent, enemies):
+def findClosestEnemy(agent, enemies):
 
     distances = []
 

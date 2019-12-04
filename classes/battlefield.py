@@ -96,14 +96,14 @@ class BattleField:
             neigh_to_attac = neighbours1
         
         for n in neigh_to_attac:
-            n_uid = self.uid_map[n].item()  # Get neighbour unit
+            n_uid = int(self.uid_map[n].item())  # Get neighbour unit
             if n_uid == 0:
                 continue  # Empty spot
             n_unit = self.units[n_uid]
             if unit.team == n_unit.team:
                 continue  # friendly fire
             # Everything seems correct, attack
-            poss_actions.append((BattleField.unit_attack, (uid, n_uid)))       
+            poss_actions.append((BattleField.unit_attack, (uid, n_uid)))
 
         # Always append option to do nothing - with empty touple
         poss_actions.append((BattleField.unit_nothing, ()))
