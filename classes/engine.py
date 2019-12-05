@@ -52,7 +52,7 @@ class Engine:
             if uid not in units.keys():
                 continue
             available_acts = self.field.get_available_actions(uid)
-            print(available_acts, '\n')
+
             action, args = units[uid].strat.make_move(self.field, uid, available_acts)
             
             #Add missing probability 
