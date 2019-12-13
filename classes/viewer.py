@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
+from matplotlib.patches import Circle
 
 colors = ['ro', 'bo', 'co', 'go', 'mo', 'yo']
 
@@ -15,6 +16,7 @@ class Viewer:
         self.fig, self.ax = plt.subplots()
         self.obstacles, = plt.plot([], [], 'ks', markersize=15)
         self.data = {}
+        self.range_circles = []
         for i, team in enumerate(self.teams):
             self.data[team] = plt.plot([], [], colors[i], markersize=15)
 
@@ -36,12 +38,22 @@ class Viewer:
     def update(self, num):
         for i, a in enumerate(self.annotations):
             a.remove()
+        for circle in self.range_circles:
+            circle.remove()
+        self.range_circles = []
 
         self.annotations[:] = []
         obstacles, units = self.convert_to_data(self.states[num], self.units_history[num])
         for team in self.data.keys():
             if team in units.keys():
                 self.data[team][0].set_data(units[team]['x'], units[team]['y'])
+                for i in range(len(units[team]['x'])):
+                    atack_r = Circle(xy=(float(units[team]['x'][i]), float(units[team]['y'][i])),
+                                     radius=units[team]['ran'][i])
+                    atack_r.set_edgecolor('lightgrey')
+                    atack_r.set_facecolor('none')
+                    self.ax.add_artist(atack_r)
+                    self.range_circles.append(atack_r)
                 for i, hp in enumerate(units[team]['hp']):
                     hp_label = self.ax.annotate(hp, xy=(units[team]['x'][i], units[team]['y'][i]), ha='center',
                                                 va='center',
@@ -71,8 +83,9 @@ class Viewer:
                 if field[i, j] > 0:
                     team = units[field[i, j]].team
                     if team not in unit_cords.keys():
-                        unit_cords[team] = {'x': [], 'y': [], 'hp': []}
+                        unit_cords[team] = {'x': [], 'y': [], 'hp': [], 'ran': []}
                     unit_cords[team]['x'].append(i + 0.5)
                     unit_cords[team]['y'].append(j + 0.5)
                     unit_cords[team]['hp'].append(units[field[i, j]].hp)
+                    unit_cords[team]['ran'].append(units[field[i, j]].ran)
         return obstacles, unit_cords
