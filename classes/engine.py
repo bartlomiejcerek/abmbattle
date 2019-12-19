@@ -9,11 +9,12 @@ from classes.unit import Unit
 
 
 class Engine:
-    def __init__(self):
+    def __init__(self, save_all_moves = True):
         self.history = []  # History of uid_maps after every move
         self.units_history = []  # History of uid_maps after every move
         self.round = 0
         self.teams = None
+        self.save_all = save_all_moves
 
     def load_config(self, config_file):
         # Read map file
@@ -62,10 +63,14 @@ class Engine:
             # Perform Action (explicit passing of object)
             action(self.field, *args)
 
-            # For vizualization
-            field_snap, units_snap = self.field.get_snapshot()
-            self.history.append(field_snap)
-            self.units_history.append(units_snap)
+            # For vizualization after each move
+            if(self.save_all):
+                self._history_snap()
+        
+        # For vizualization after each round
+        if(not self.save_all):
+            self._history_snap()
+
 
     def check_state(self):
         '''This function in futre will return info about mode, now only if over'''
@@ -85,3 +90,9 @@ class Engine:
 
     def get_units_visualization_data(self):
         return self.units_history, self.teams
+    
+    def _history_snap(self):
+        field_snap, units_snap = self.field.get_snapshot()
+        self.history.append(field_snap)
+        self.units_history.append(units_snap)
+        
