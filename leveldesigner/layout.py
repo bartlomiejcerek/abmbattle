@@ -140,6 +140,7 @@ class SetCoordinates(Page):
         self.fig = Figure(figsize=(7, 7), dpi=100, tight_layout=True)
         self.ax = self.fig.add_subplot(111)
         self.ax.plot([], [])
+        self.mouse_pressed = False
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=field)
         self.canvas.draw()
@@ -179,7 +180,7 @@ class SetCoordinates(Page):
         self.atack_el = tk.Entry(parameters, textvariable=self.attack)
         self.atack_el.grid(row=8)
         tk.Label(parameters, text="Range").grid(row=9, sticky=tk.W)
-        self.strategy_element = tk.OptionMenu(parameters, self.ran, *(1,2))
+        self.strategy_element = tk.OptionMenu(parameters, self.ran, *(1, 2))
         self.strategy_element.grid(row=10, sticky=tk.W)
         self.strategy_element.config(width=30)
         tk.Label(parameters, text="Strategy").grid(row=11, sticky=tk.W)
@@ -190,10 +191,9 @@ class SetCoordinates(Page):
         self.teams_map = {}
 
     def on_press(self, event):
-        pass
-        # MPL MouseEvent: xy=(434,314) xydata=(3.9454114766315347,7.76) button=1 dblclick=False inaxes=AxesSubplot(0.125,0.11;0.775x0.77)
+        self.mouse_pressed = True
 
-    def on_release(self, event):
+    def set_one_obj(self, event):
         if self.obstacle.get():
             settings.create_obstacle(int(event.xdata), int(event.ydata))
         if self.clear.get():
@@ -202,22 +202,22 @@ class SetCoordinates(Page):
             try:
                 if self.team.get() is None or self.team.get() == "":
                     raise ValueError("Pick team")
-                    
-                try: #Nested try to make sure casting happend
+
+                try:  # Nested try to make sure casting happend
                     hp = int(self.hp.get())
                     attack = int(self.attack.get())
                 except:
                     raise ValueError("Set HP and Attack")
-             
+
                 if hp <= 0 or attack <= 0:
                     raise ValueError("Hp and attack should be positive")
-                
+
                 if self.ran.get() is None or self.ran.get() == "":
                     raise ValueError("Choose range")
 
                 if self.strategy.get() is None or self.strategy.get() == "":
                     raise ValueError("Choose strategy")
-                
+
                 settings.create_unit(int(event.xdata), int(event.ydata), self.team.get(), hp,
                                      attack, int(self.ran.get()), self.strategy.get())
             except Exception as e:
@@ -226,8 +226,13 @@ class SetCoordinates(Page):
 
         self.refresh_board()
 
+    def on_release(self, event):
+        self.set_one_obj(event)
+        self.mouse_pressed = False
+
     def on_move(self, event):
-        pass
+        if self.mouse_pressed:
+            self.set_one_obj(event)
 
     def set_empty(self):
         if self.clear.get() == 1:
