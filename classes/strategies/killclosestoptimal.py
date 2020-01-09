@@ -7,15 +7,6 @@ class KillTheClosest():
     def __init__(self):
         pass
 
-    def findClosestEnemy(self, agent, enemies):
-
-        distances = []
-
-        for i in enemies:
-            distances.append(en.manhattanMetcic(agent, i))
-
-        return enemies[distances.index(min(distances))]
-
     def make_move(self, field, uid, poss_actions):
 
         if (len(poss_actions) == 1):
