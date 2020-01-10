@@ -21,17 +21,27 @@ class Spartan():
             return poss_actions[0]
 
         mahBoy, enemies = en.findEnemies(field, uid)
+        
+        #There is error when enemies array is empty - happens on last move
+        #To avoid quick fix - just return nothing 
+        if len(enemies) == 0:
+            for act in poss_actions:
+                if act[0].type == 'Nothing':
+                    action = act
+                    return action
+        
         closestEnemy = search.findClosestEnemy(mahBoy, enemies)
         dist = self.euclidian_dist(mahBoy, closestEnemy)
-        
+        poss_act_types = [act[0].type for act in poss_actions]
+         
         #Make decision about action based on distance to closest enemy
         if dist == 1:
             act_name = 'Block'
-        elif dist == 2:
+        elif dist == 2 and 'Attack' in poss_act_types:
             act_name = 'Attack'
         else:
             act_name = 'Nothing'
-
+        
         #Find method in possible action
         for act in poss_actions:
             if act[0].type == act_name:

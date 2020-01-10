@@ -12,7 +12,7 @@ class BigViewer:
         self.no_frames = len(history)
         self.units_history = units_data[0]
         self.fig = plt.figure()
-        self.cmap = colors.ListedColormap(['black', 'white', 'red', 'blue', 'green', 'yellow'])        
+        self.cmap = colors.ListedColormap(['black', 'white', 'red', 'blue'])        
         axes = plt.gca()
         x = history[0].shape[0]
         y = history[0].shape[1]
@@ -47,5 +47,5 @@ class BigViewer:
         for (x,y), uid in np.ndenumerate(h):
             if uid in u.keys():
                 h[x,y] = u[uid].team      
-        return h
+        return np.rot90(h, k=3) #Dont know why but it was rotated
         
