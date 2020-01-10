@@ -67,6 +67,11 @@ class Engine:
             if(self.save_all):
                 self._history_snap()
         
+        #Put all shields down
+        all_uids = list(units.keys())
+        for uid in all_uids:
+            units[uid].shield = False
+            
         # For vizualization after each round
         if(not self.save_all):
             self._history_snap()

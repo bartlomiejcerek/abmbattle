@@ -160,7 +160,7 @@ class SetCoordinates(Page):
         self.attack = tk.StringVar(self)
         self.ran = tk.StringVar(self)
         self.strategy = tk.StringVar(self)
-        self.strategy_list = ["KillTheClosest", "RandomStrategy", "Pacifist"]
+        self.strategy_list = ["KillTheClosest", "RandomStrategy", "Pacifist", "Spartan"]
         self.team_list = ()
         tk.Checkbutton(parameters, text="empty", variable=self.clear,
                        onvalue=1, offvalue=0, command=self.set_empty).grid(row=0, sticky=tk.W)

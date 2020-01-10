@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
-
 import numpy as np
+import random
 
 
 #Module Utilities
@@ -57,12 +57,21 @@ class BattleField:
         self.units_pos[uid] = new_pos  # Update units dict too
 
     unit_move.type = 'Move'  # Add type for easy checking
+    
+    def unit_block(self, uid):
+        self.units[uid].shield = True
+    
+    unit_block.type = 'Block'
 
     def unit_attack(self, attacker_uid, defender_uid):
         '''That funcion DOES NOT check if move is legal!'''
         # Get attacker and defender stats
         attacker = self.units[attacker_uid]
         defender = self.units[defender_uid]
+        
+        #Check if shield is rised and if yes check if lucky
+        if defender.shield and random.random() < 0.8: #Magic probability of shield
+            return #When defence scenario happends just cancel attack
 
         # Check if we have kill
         if defender.hp - attacker.att <= 0:
@@ -107,6 +116,8 @@ class BattleField:
 
         # Always append option to do nothing - with empty touple
         poss_actions.append((BattleField.unit_nothing, ()))
+        #Always append option to block - only spartans will use it
+        poss_actions.append((BattleField.unit_block, (uid,)))
 
         return poss_actions
 

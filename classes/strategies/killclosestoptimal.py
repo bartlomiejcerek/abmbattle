@@ -9,7 +9,7 @@ class KillTheClosest():
 
     def make_move(self, field, uid, poss_actions):
 
-        if (len(poss_actions) == 1):
+        if (len(poss_actions) == 2):
             return poss_actions[0]
 
         for i in range(0, len(poss_actions)):
